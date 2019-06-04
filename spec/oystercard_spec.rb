@@ -1,10 +1,10 @@
 require 'oystercard'
 
 describe Oystercard do
-  subject { Oystercard.new }
+  subject(:card) { described_class.new }
 
   it 'has a balance of zero' do
-  expect(subject.balance).to eq(0)
+  expect(card.balance).to eq(0)
   end
 
 describe '#top_up' do
@@ -12,13 +12,13 @@ describe '#top_up' do
   it { is_expected.to respond_to(:top_up).with(1).argument }
 
   it 'can top up the balance' do
-    expect{ subject.top_up 1 }.to change{ subject.balance }.by 1
+    expect{ card.top_up 1 }.to change{ subject.balance }.by 1
   end
 
   it 'raises an error if the maximum balance is exceeded' do
     max_balance = Oystercard::MAX_BALANCE
-    subject.top_up max_balance
-    expect{ subject.top_up 1 }.to raise_error ("Maximum balance of #{max_balance} exceeded")
+    card.top_up max_balance
+    expect{ card.top_up 1 }.to raise_error ("Maximum balance of #{max_balance} exceeded")
   end
 end
 # In order to pay for my journey
@@ -26,27 +26,27 @@ end
 # I need my fare deducted from my card
   describe '#deduct' do
     it 'takes an argument and deducts it from the balance' do
-    subject.top_up(45)
-    expect(subject.deduct(5)).to eq (40)
+    card.top_up(45)
+    expect(card.deduct(5)).to eq (40)
     end
   end
 
   it 'responds if the customer is in journey' do
-    expect(subject.in_journey?).to be_falsey
+    expect(card.in_journey?).to be_falsey
   end
 
   it 'allows customer to touch in' do
-    subject.top_up(2)
-    subject.touch_in
-    expect(subject).to be_in_journey
+    card.top_up(2)
+    card.touch_in
+    expect(card).to be_in_journey
   end
 
   it 'allows customer to touch out' do
-    subject.touch_out
-    expect(subject).not_to be_in_journey
+    card.touch_out
+    expect(card).not_to be_in_journey
   end
 
   it 'does not allow touch in without balance under £1' do
-     expect { subject.touch_in }.to raise_error "Your balance is below £1. Please top up"
+     expect { card.touch_in }.to raise_error "Your balance is below £1. Please top up"
   end
 end
