@@ -25,8 +25,8 @@ class Oystercard
   end
 
   def touch_in
-    # fail "Your balance is below £1. Please top up" if @balance < 1
     @in_use = true
+    fail "Your balance is below £1. Please top up" if @balance < MIN_BALANCE
   end
 
   def touch_out

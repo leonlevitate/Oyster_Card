@@ -36,6 +36,7 @@ end
   end
 
   it 'allows customer to touch in' do
+    subject.top_up(2)
     subject.touch_in
     expect(subject).to be_in_journey
   end
@@ -45,7 +46,7 @@ end
     expect(subject).not_to be_in_journey
   end
 
-  # it 'does not allow touch in without balance under £1' do
-  #   expect { subject.touch_in }.to raise_error "Your balance is below £1. Please top up"
-  # end
+  it 'does not allow touch in without balance under £1' do
+     expect { subject.touch_in }.to raise_error "Your balance is below £1. Please top up"
+  end
 end
