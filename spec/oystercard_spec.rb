@@ -6,6 +6,7 @@ describe Oystercard do
   let(:entry_station){ double :station }
   let(:exit_station){ double :station }
   let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
+
   let(:max_balance){Oystercard::MAX_BALANCE}
   let(:min_balance){Oystercard::MIN_BALANCE}
 
@@ -27,9 +28,9 @@ describe Oystercard do
 
   describe '#in_journey' do
 
-    it 'is initially not in a journey' do
-      expect(card.in_journey?).to be_falsey
-    end
+  #  it 'is initially not in a journey' do
+  #    expect(card.in_journey?).to be_falsey
+  #  end
 
     it 'has an empty list of journeys by default' do
       expect(card.journeys).to be_empty
@@ -71,12 +72,12 @@ describe Oystercard do
       expect { card.touch_out(exit_station) }.to change{card.balance}.by(-Oystercard::MIN_BALANCE)
     end
 
-    it 'stores exit station' do
-      card.top_up(min_balance)
-      card.touch_in(entry_station)
-      card.touch_out(exit_station)
-      expect(card.exit_station).to eq exit_station
-    end
+    #it 'stores exit station' do
+    #  card.top_up(min_balance)
+    #  card.touch_in(entry_station)
+    #   card.touch_out(exit_station)
+    #   expect(card.exit_station).to eq exit_station
+    # end
   end
 
   describe 'record of journey' do
