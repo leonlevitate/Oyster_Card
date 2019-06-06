@@ -26,17 +26,6 @@ describe Oystercard do
     end
   end
 
-  describe '#in_journey' do
-
-  #  it 'is initially not in a journey' do
-  #    expect(card.in_journey?).to be_falsey
-  #  end
-
-    it 'has an empty list of journeys by default' do
-      expect(card.journeys).to be_empty
-    end
-  end
-
   describe '#touch_in' do
     it 'does not allow touch in if balance is under £1' do
        expect { card.touch_in(entry_station) }.to raise_error "Your balance is below £1. Please top up"
@@ -71,16 +60,13 @@ describe Oystercard do
       card.touch_in(entry_station)
       expect { card.touch_out(exit_station) }.to change{card.balance}.by(-Oystercard::MIN_BALANCE)
     end
-
-    #it 'stores exit station' do
-    #  card.top_up(min_balance)
-    #  card.touch_in(entry_station)
-    #   card.touch_out(exit_station)
-    #   expect(card.exit_station).to eq exit_station
-    # end
   end
 
   describe 'record of journey' do
+
+    it 'has an empty list of journeys by default' do
+      expect(card.journeys).to be_empty
+    end
 
     it 'stores a journey' do
       card.top_up(min_balance)
