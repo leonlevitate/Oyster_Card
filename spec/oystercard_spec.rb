@@ -8,9 +8,11 @@ describe Oystercard do
   let(:max_balance){Oystercard::MAX_BALANCE}
   let(:min_balance){Oystercard::MIN_BALANCE}
 
-  it 'has a balance of zero' do
-  expect(card.balance).to eq(0)
-  end
+  context 'balance check & top up' do
+
+    it 'has a balance of zero' do
+      expect(card.balance).to eq(0)
+    end
 
     it 'can top up the balance' do
       expect{ card.top_up 1 }.to change{ card.balance }.by 1
@@ -20,6 +22,7 @@ describe Oystercard do
       card.top_up(max_balance)
       expect{ card.top_up 1 }.to raise_error ("Maximum balance of #{max_balance} exceeded")
     end
+  end
 
   describe '#in_journey' do
     it 'is initially not in a journey' do
@@ -32,29 +35,34 @@ describe Oystercard do
        expect { card.touch_in(entry_station) }.to raise_error "Your balance is below £1. Please top up"
     end
 
-    it 'allows customer to touch in' do
-      card.top_up(min_balance)
-      card.touch_in(entry_station)
-      expect(card).to be_in_journey
+    context 'oystercard is in journey due to successful touch in' do
+
+      before (:each) do
+        card.top_up(min_balance)
+        card.touch_in(entry_station)
+      end
+
+      it 'allows customer to touch in' do
+        expect(card).to be_in_journey
+      end
+
+      it 'records the entry station' do
+        expect(card.entry_station).to eq entry_station
+      end
+    end
+  end
+
+  describe '#touch_out' do
+
+    it 'allows customer to touch out' do
+      card.touch_out(exit_station)
+      expect(card).not_to be_in_journey
     end
 
     it 'reduces balance by minimum fair' do
       card.top_up(min_balance)
       card.touch_in(entry_station)
       expect { card.touch_out(exit_station) }.to change{card.balance}.by(-Oystercard::MIN_BALANCE)
-    end
-  end
-
-    it 'records the entry station' do
-      card.top_up(min_balance)
-      card.touch_in(entry_station)
-      expect(card.entry_station).to eq entry_station
-    end
-
-  describe '#touch_out' do
-    it 'allows customer to touch out' do
-      card.touch_out(exit_station)
-      expect(card).not_to be_in_journey
     end
 
     it 'stores exit station' do
